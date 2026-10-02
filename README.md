@@ -46,7 +46,7 @@ src/
 ## Plan de la semana (backend)
 
 - [x] **Día 1:** Cimientos (scripts, env, conexión a Mongo, errores, `/health`)
-- [ ] **Día 2:** Modelos (`Producto` con variantes por fracción, `Color`, `Ajustes`, `Admin`)
+- [x] **Día 2:** Modelos (`Producto` con variantes por fracción, `Color`, `Ajustes`, `Admin`)
 - [ ] **Día 3:** API pública de lectura (catálogo, filtros, colores, caché)
 - [ ] **Día 4:** Autenticación admin (JWT, rate limit, helmet, CORS)
 - [ ] **Día 5:** CRUD admin e imágenes (Cloudinary con subida firmada)
