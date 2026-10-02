@@ -17,7 +17,7 @@ Pendiente / siguiente:
 
 ## Día 2 · 2026-10-02 · Modelos de datos en Mongoose
 
-**Commits:** `ea70282` feat: modelos Producto, Color, Ajustes y Admin
+**Commits:** `853eed4` feat: modelos Producto, Color, Ajustes y Admin
 
 **Qué se hizo:**
 - `src/models/Producto.js`: Catálogo general, venta fraccionada (RF-02) con variantes por medida y precio, soporte para marca propia PintuSan (RF-01, RF-10), categorías (RF-03), autogeneración de slugs limpios e índices de texto para buscador en tiempo real (RF-04).
