@@ -17,7 +17,7 @@ Pendiente / siguiente:
 
 ## Día 3 · 2026-10-13 · API pública de lectura, catálogo, colores, ajustes y calculadora
 
-**Commits:** `por asignar` feat: API pública de lectura, catálogo, colores, ajustes y calculadora
+**Commits:** `02aeb42` feat: API pública de lectura, catálogo, colores, ajustes y calculadora
 
 **Qué se hizo:**
 - `src/middlewares/cacheControl.js`: Middleware configurable para encabezados HTTP `Cache-Control` (`public, max-age, s-maxage, stale-while-revalidate`) que habilita el Edge Cache de Vercel y acelera tiempos de respuesta (< 2s, RNF-01).
