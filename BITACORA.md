@@ -17,7 +17,7 @@ Pendiente / siguiente:
 
 ## Día 4 · 2026-10-13 · Autenticación admin, seguridad HTTP y control de acceso
 
-**Commits:** `por asignar` feat: autenticación admin (JWT, rate limit, helmet, CORS)
+**Commits:** `3708796` feat: autenticación admin (JWT, rate limit, helmet, CORS)
 
 **Qué se hizo:**
 - Dependencias de seguridad: `jsonwebtoken`, `helmet`, `express-rate-limit`.
