@@ -4,6 +4,7 @@ import productoRoutes from "./productoRoutes.js";
 import colorRoutes from "./colorRoutes.js";
 import ajustesRoutes from "./ajustesRoutes.js";
 import calculadoraRoutes from "./calculadoraRoutes.js";
+import authRoutes from "./authRoutes.js";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use("/productos", productoRoutes);
 router.use("/colores", colorRoutes);
 router.use("/ajustes", ajustesRoutes);
 router.use("/calculadora", calculadoraRoutes);
+router.use("/auth", authRoutes);
 
 export default router;

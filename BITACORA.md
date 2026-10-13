@@ -15,6 +15,44 @@ Pendiente / siguiente:
 
 ---
 
+## Día 4 · 2026-10-13 · Autenticación admin, seguridad HTTP y control de acceso
+
+**Commits:** `por asignar` feat: autenticación admin (JWT, rate limit, helmet, CORS)
+
+**Qué se hizo:**
+- Dependencias de seguridad: `jsonwebtoken`, `helmet`, `express-rate-limit`.
+- `src/config/env.js`: Soporte y validación de `JWT_SECRET`, `JWT_EXPIRES_IN` y `FRONTEND_URL`. En producción exige clave obligatoria para arrancar el servidor.
+- `src/utils/jwt.js`: Utilidades para firmar tokens JWT con expiración configurable (7 días por defecto) y verificar firmas.
+- `src/middlewares/auth.js`:
+  - `requireAuth`: Extrae el token `Bearer` de la cabecera `Authorization`, valida su integridad/expiración, busca al administrador en MongoDB, comprueba que la cuenta esté activa (`activo: true`) y adjunta la instancia a `req.admin`.
+  - `requireRol`: Control de acceso basado en roles (`superadmin`, `admin`) para endpoints restringidos.
+- `src/middlewares/rateLimiter.js`:
+  - `authLimiter`: Límite estricto de 10 peticiones cada 15 minutos en `/api/v1/auth/login` para prevenir ataques de fuerza bruta.
+  - `apiLimiter`: Limitador general de 300 peticiones cada 15 minutos por IP para proteger la API de sobrecarga.
+- `src/middlewares/corsConfig.js`: Configuración dinámica de CORS que permite orígenes locales en desarrollo y restringe estrictamente a los dominios configurados en `FRONTEND_URL` en producción.
+- `src/controllers/authController.js` y `src/routes/authRoutes.js`:
+  - `POST /api/v1/auth/login`: Autenticación con email/contraseña, verificación con bcrypt, registro de `ultimoAcceso` y retorno de JWT y datos del usuario (sin exponer password).
+  - `GET /api/v1/auth/perfil`: Consulta de sesión protegida para el administrador actual.
+  - `PUT /api/v1/auth/cambiar-password`: Cambio seguro de contraseña validando la contraseña actual y hasheando la nueva con salt.
+- `src/app.js`: Integración de Helmet para cabeceras HTTP seguras (`X-Content-Type-Options: nosniff`, etc.), CORS restrictivo y limitador general de peticiones.
+- `scripts/seed-admin.js`: Script idempotente (`npm run seed:admin`) para inicializar el superadministrador por defecto (`admin@pintusan.com`) si no existe en la base de datos.
+- `scripts/test-dia4.js`: Suite automatizada (`npm run test:dia4`) con 12 pruebas que validan headers de seguridad, intentos fallidos (400, 401), login exitoso, protección de rutas sin token/con token falso, cambio de contraseña y bloqueo de cuentas inactivas (403).
+
+**Decisiones y por qué:**
+- La contraseña en `Admin.js` permanece protegida con `select: false` y solo se solicita explícitamente mediante `.select("+password")` dentro del controlador de login y cambio de contraseña, imposibilitando fugas accidentales en serializaciones JSON.
+- Se implementó un rate limiter exclusivo para el login además del limitador general, porque la autenticación es el vector más vulnerable a ataques de fuerza bruta y diccionarios de contraseñas.
+- Se diseñó `requireRol` como middleware componible para que en el Día 5 sea trivial proteger endpoints exclusivos de superadministrador.
+- El script de seed es idempotente, permitiendo ejecutarlo en pipelines CI/CD o en despliegues sin riesgo de duplicar cuentas ni alterar contraseñas existentes.
+
+**Cómo verificar:**
+- Ejecutar `npm run test:dia4` para correr las 12 pruebas automatizadas.
+- Probar el script de inicialización con `npm run seed:admin`.
+- Probar `npm run test:dia3` para asegurar cero regresiones en la API pública.
+
+**Pendiente / siguiente:** Día 5, CRUD admin de catálogo (crear, editar, borrar productos y fracciones) y subida de imágenes con Cloudinary.
+
+---
+
 ## Día 3 · 2026-10-13 · API pública de lectura, catálogo, colores, ajustes y calculadora
 
 **Commits:** `02aeb42` feat: API pública de lectura, catálogo, colores, ajustes y calculadora
