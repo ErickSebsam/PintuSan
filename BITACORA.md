@@ -15,6 +15,43 @@ Pendiente / siguiente:
 
 ---
 
+## Día 3 · 2026-10-13 · API pública de lectura, catálogo, colores, ajustes y calculadora
+
+**Commits:** `por asignar` feat: API pública de lectura, catálogo, colores, ajustes y calculadora
+
+**Qué se hizo:**
+- `src/middlewares/cacheControl.js`: Middleware configurable para encabezados HTTP `Cache-Control` (`public, max-age, s-maxage, stale-while-revalidate`) que habilita el Edge Cache de Vercel y acelera tiempos de respuesta (< 2s, RNF-01).
+- `src/utils/escapeRegex.js`: Utilidad para escapar metacaracteres en expresiones regulares, protegiendo las búsquedas contra errores de sintaxis y ataques ReDoS.
+- `src/controllers/productoController.js` y `src/routes/productoRoutes.js`:
+  - `GET /api/v1/productos`: Catálogo general paginado con filtros dinámicos (categoría RF-03, marca propia RF-01, línea RF-10, medida fraccionada RF-02, preparación RF-05, destacados) y buscador en tiempo real (`q`, RF-04).
+  - `GET /api/v1/productos/destacados`: Productos destacados para el Home / Hero.
+  - `GET /api/v1/productos/categorias`: Agrupación de categorías activas con total de productos disponibles.
+  - `GET /api/v1/productos/:slug`: Detalle individual por slug limpio o fallback por `_id`.
+- `src/controllers/colorController.js` y `src/routes/colorRoutes.js`:
+  - `GET /api/v1/colores`: Catálogo interactivo de colores para "Color a la Medida" (RF-05, RF-06) con filtros por colección, tipo de pintura (vinilo, esmalte) y popularidad.
+  - `GET /api/v1/colores/colecciones`: Agrupación de colecciones/cartas de color con su total de tonos.
+  - `GET /api/v1/colores/:codigo`: Búsqueda de color por código normalizado (soporta con o sin `#`) o por `_id`.
+- `src/controllers/ajustesController.js` y `src/routes/ajustesRoutes.js`:
+  - `GET /api/v1/ajustes`: Exposición de datos públicos de WhatsApp (RF-08, RF-14), medios de pago Nequi/Daviplata/Bancolombia con QR y política de anticipo del 50% (RF-12, RF-13), advertencia de varianza en pantalla (RF-07), aviso de domicilio variable (RF-15) y datos institucionales (RF-20, RF-21).
+- `src/services/calculadoraService.js`, `src/controllers/calculadoraController.js` y `src/routes/calculadoraRoutes.js`:
+  - `GET /api/v1/calculadora`: Parámetros base de rendimiento (m²/galón) por línea y guía técnica de dilución (RF-10, RF-11).
+  - `GET / POST /api/v1/calculadora/calcular`: Cálculo autónomo sin compromiso de compra (RF-09), con cálculo de galones/litros y algoritmo inteligente de recomendación de envases comerciales (desde cuñetes de 5 galones hasta tarros de compota de 1/32 de galón).
+- `scripts/test-dia3.js`: Runner con 13 pruebas automatizadas para verificar códigos HTTP, serialización, cabeceras de caché, consultas por slug/código y búsquedas seguras con caracteres especiales.
+
+**Decisiones y por qué:**
+- Rutas específicas (`/destacados`, `/categorias`, `/colecciones`) se declaran antes de las rutas con parámetros dinámicos (`/:slug`, `/:codigo`) en Express para evitar colisiones de captura.
+- Las consultas de texto utilizan `escapeRegex` antes de pasar a MongoDB `$regex` con opción `i`, permitiendo coincidencias parciales case-insensitive sin riesgo de error sintáctico ante caracteres especiales como paréntesis o corchetes.
+- La calculadora soporta tanto `POST` (con payload JSON) como `GET` (con query params), facilitando la integración desde formularios o enlaces directos compartibles en la interfaz de usuario.
+- `Cache-Control` con `stale-while-revalidate` entrega respuestas inmediatas desde el Edge CDN de Vercel mientras actualiza en segundo plano cuando sea necesario.
+
+**Cómo verificar:**
+- Ejecutar `npm run test:dia3` para correr la batería de 13 pruebas automatizadas contra MongoDB Atlas.
+- Iniciar el servidor con `npm run dev` y consultar `http://localhost:4500/api/v1/productos`, `http://localhost:4500/api/v1/colores`, `http://localhost:4500/api/v1/ajustes` o `http://localhost:4500/api/v1/calculadora/calcular?m2=90&manos=2`.
+
+**Pendiente / siguiente:** Día 4, Autenticación admin (JWT, rate limit, helmet, CORS restringido).
+
+---
+
 ## Día 2 · 2026-10-02 · Modelos de datos en Mongoose
 
 **Commits:** `853eed4` feat: modelos Producto, Color, Ajustes y Admin

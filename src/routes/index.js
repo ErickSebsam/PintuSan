@@ -1,5 +1,9 @@
 import { Router } from "express";
 import mongoose from "mongoose";
+import productoRoutes from "./productoRoutes.js";
+import colorRoutes from "./colorRoutes.js";
+import ajustesRoutes from "./ajustesRoutes.js";
+import calculadoraRoutes from "./calculadoraRoutes.js";
 
 const router = Router();
 
@@ -11,5 +15,10 @@ router.get("/health", (req, res) => {
     uptime: Math.round(process.uptime()),
   });
 });
+
+router.use("/productos", productoRoutes);
+router.use("/colores", colorRoutes);
+router.use("/ajustes", ajustesRoutes);
+router.use("/calculadora", calculadoraRoutes);
 
 export default router;
